@@ -1,17 +1,22 @@
 const inquirer = require("inquirer");
 const sql = require("mysql2");
-const viewAllDepartment = require("./utils/dept");
-const addDepartment = require("./utils/dept");
-const viewAllRoles = require("./utils/role");
+const {
+  viewAllDepartment,
+  addDepartment,
+  deleteDept,
+} = require("./utils/dept");
+
+// const  = require("./utils/dept");
+const { viewAllRoles, addRole, deleteRole } = require("./utils/role");
 const viewAllEmployees = require("./utils/emp");
-// const connection = require("./config/connection");
+const dbase = require("./config/connection");
 const Sequelize = require("sequelize");
-const dbase = sql.createConnection({
-  user: "root",
-  password: "@6UHnuk9d@123",
-  database: "employee_db",
-  multipleStatements: true,
-});
+// const dbase = sql.createConnection({
+//   user: "root",
+//   password: "@6UHnuk9d@123",
+//   database: "employee_db",
+//   multipleStatements: true,
+// });
 
 function startPrompt() {
   inquirer
@@ -27,6 +32,9 @@ function startPrompt() {
         "Add A Role",
         "Add An Employee",
         "Update Employee's Role",
+        "Delete department",
+        "Delete role",
+        "Quit",
       ],
     })
     .then((answer) => {
@@ -44,13 +52,22 @@ function startPrompt() {
           addDepartment(dbase, startPrompt);
           break;
         case "Add A Role":
-          createRole(dbase, startPrompt);
+          addRole(dbase, startPrompt);
           break;
         case "Add An Employee":
           createEmployee(dbase, startPrompt);
           break;
         case "Update Employee's Role":
           updateRole(dbase, startPrompt);
+          break;
+        case "Delete department":
+          deleteDept(dbase, startPrompt);
+          break;
+        case "Delete role":
+          deleteRole(dbase, startPrompt);
+          break;
+        case "QUIT":
+          dbase.end();
           break;
         default:
           break;
@@ -59,8 +76,8 @@ function startPrompt() {
 }
 
 startPrompt();
-// Start application
-// connection.connect((err) => {
+// // Start application
+// dbase.connect((err) => {
 //   if (err) throw err;
 //   startPrompt();
 // });

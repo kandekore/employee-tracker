@@ -6,6 +6,7 @@ function viewAllDepartment(dbase, startPrompt) {
   const query = "SELECT * FROM department";
   dbase.query(query, (err, res) => {
     if (err) throw err;
+
     console.table(res);
     startPrompt();
   });
@@ -41,5 +42,37 @@ function addDepartment(connection, startPrompt) {
     });
 }
 
-module.exports = viewAllDepartment;
-module.exports = addDepartment;
+function deleteDept(dbase, startPrompt) {
+  dbase.query("SELECT * FROM department", (err, results) => {
+    if (err) throw err;
+    inquirer
+      .prompt([
+        {
+          name: "deletedept",
+          type: "list",
+          choices() {
+            const deptArray = [];
+            for (let i = 0; i < results.length; i++) {
+              deptArray.push(results[i].name);
+            }
+            return deptArray;
+          },
+          message: "Which department would you like to delete?",
+        },
+      ])
+      .then((answer) => {
+        const query = "DELETE FROM department WHERE name = ?";
+        connection.query(query, answer.deletedept, (err) => {
+          if (err) throw err;
+          console.log("Department deleted");
+          startPrompt();
+        });
+      });
+  });
+}
+
+module.exports = {
+  viewAllDepartment,
+  addDepartment,
+  deleteDept,
+};
