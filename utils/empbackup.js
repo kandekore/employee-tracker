@@ -2,11 +2,9 @@ const inquirer = require("inquirer");
 // const Connection = require("mysql2/typings/mysql/lib/Connection");
 const connection = require("../config/connection");
 const then = require("mysql2/promise");
-// const { SELECT } = require("sequelize/types/query-types");
 
 function viewAllEmployees(dbase, startPrompt) {
-  const query =
-    "SELECT employee.id as 'Employee ID', first_name as 'First Name', last_name as 'Last Name', role.title as 'Job Title', role.salary as Salary, department.name as Department  FROM employee inner join role on employee.role_id = role.id inner join department on role.department_id = department.id;";
+  const query = "SELECT * FROM employee";
   dbase.query(query, (err, res) => {
     if (err) throw err;
     console.table(res);
@@ -202,50 +200,31 @@ function updateEmployee(connection, startPrompt) {
   });
 }
 
+///NEED TO FETCH ID FROM ROLE
+
+///
 function viewByManager(connection, startPrompt) {
-  // var mgrIds = [...new Set(groupStaff)];
+  const groupStaff = [];
 
-  // connection.query(
-  //   "SELECT * FROM employee WHERE manager_id > 0",
-  //   (err, res) => {
-  //     if (err) throw err;
+  connection.query(
+    "SELECT * FROM employee WHERE manager_id > 0",
+    (err, res) => {
+      if (err) throw err;
 
-  inquirer.prompt([
-    {
-      name: "employeemanager",
-      type: "list",
-      choices() {
-        const groupStaff = [];
-        var mgrIds = [...new Set(groupStaff)];
-        connection.query(
-          "SELECT * FROM employee WHERE manager_id > 0",
-          (err, res) => {
-            if (err) throw err;
+      for (let i = 0; i < res.length; i++) {
+        groupStaff.push(res[i].manager_id);
+      }
 
-            for (let i = 0; i < res.length; i++) {
-              connection.query(
-                "SELECT * FROM employee WHERE id = ? ",
-                res[i].manager_id,
-                 
-                
-
-                  groupStaff.push({
-                    name: results[i].first_name + " " + results[i].last_name,
-                    value: results[i].id,
-                  });
-                  console.log(results);
-                
-              );
-            }
-          }
-        );
-        return groupStaff;
-      },
-      message: "Choose Manager",
-    },
-  ]);
+      return groupStaff;
+    }
+  );
+  const uniqueChars = [...new Set(groupStaff)];
+  console.log(uniqueChars);
 }
-//   );
+
+// function viewByManager(connection, startPrompt) {
+//   // connection.query("SELECT * ")
+//   managerIdArray();
 // }
 
 module.exports = {

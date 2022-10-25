@@ -3,7 +3,8 @@ const sql = require("mysql2");
 const connection = require("../config/connection");
 
 function viewAllRoles(dbase, startPrompt) {
-  const query = "SELECT * FROM role";
+  const query =
+    "SELECT title as 'Job Title', role.id as 'Role ID', name as Department, salary as 'Salary'  FROM role inner join department on role.department_id  = department.id;";
   dbase.query(query, (err, res) => {
     if (err) throw err;
     console.table(res);
@@ -51,7 +52,10 @@ function addRole(dbase, startPrompt) {
           choices() {
             const deptNameArray = [];
             for (let i = 0; i < results.length; i++) {
-              deptNameArray.push(results[i].name);
+              deptNameArray.push({
+                name: results[i].name,
+                value: results[i].id,
+              });
             }
             return deptNameArray;
           },
@@ -61,6 +65,7 @@ function addRole(dbase, startPrompt) {
       .then((answer) => {
         newRole.title = answer.role_name;
         newRole.salary = answer.salary;
+        newRole.id;
 
         // Translate manager_name to id
         connection.query(

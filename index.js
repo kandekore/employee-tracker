@@ -1,5 +1,5 @@
 const inquirer = require("inquirer");
-const sql = require("mysql2");
+const sql = require("mysql2/promise");
 const {
   viewAllDepartment,
   addDepartment,
@@ -8,7 +8,13 @@ const {
 
 // const  = require("./utils/dept");
 const { viewAllRoles, addRole, deleteRole } = require("./utils/role");
-const viewAllEmployees = require("./utils/emp");
+const {
+  viewAllEmployees,
+  addEmployee,
+  updateEmployee,
+  viewByManager,
+  deleteEmployee,
+} = require("./utils/emp");
 const dbase = require("./config/connection");
 const Sequelize = require("sequelize");
 // const dbase = sql.createConnection({
@@ -31,7 +37,9 @@ function startPrompt() {
         "Add A Department",
         "Add A Role",
         "Add An Employee",
+        "View By Manager",
         "Update Employee's Role",
+        "Delete Employee",
         "Delete department",
         "Delete role",
         "Quit",
@@ -55,16 +63,22 @@ function startPrompt() {
           addRole(dbase, startPrompt);
           break;
         case "Add An Employee":
-          createEmployee(dbase, startPrompt);
+          addEmployee(dbase, startPrompt);
           break;
         case "Update Employee's Role":
-          updateRole(dbase, startPrompt);
+          updateEmployee(dbase, startPrompt);
+          break;
+        case "Delete Employee":
+          deleteEmployee(dbase, startPrompt);
           break;
         case "Delete department":
           deleteDept(dbase, startPrompt);
           break;
         case "Delete role":
           deleteRole(dbase, startPrompt);
+          break;
+        case "View By Manager":
+          viewByManager(dbase, startPrompt);
           break;
         case "QUIT":
           dbase.end();

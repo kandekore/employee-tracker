@@ -1,42 +1,37 @@
 -- Departments
 INSERT INTO department (name)
 VALUES 
-    ("Executive"),
-    ("Parks and Recreation"), 
+    ("Sales"),
+    ("Administration"), 
     ("Finance"), 
     ("Human Resources"), 
     ("Information Technology"), 
     ("Operations");
 
 -- Employee Roles
-INSERT INTO role (title, salary, department_id)
+INSERT INTO role (title, salary, department_name)
 VALUES
-    ("City Manager", 120000.00, 1),
-    ("Director", 90000.00, 2),
-    ("Deputy Director", 60000.00, 2),
-    ("Assistant", 35000.00, 2),
-    ("Accountant", 40000.00, 3),
-    ("Secretary", 30000.00, 4),
-    ("Payroll Manager", 45000.00, 4),
-    ("Senior Developer", 90000.00, 5),
-    ("Software Developer", 60000.00, 5),
-    ("State Auditor", 65000.00, 6),
-    ("Shoe Shiner", 25000.00, 6);
+    ("Sales Manager", 120000.00, "Sales"),
+    ("Director", 900000.00, "Administration"),
+    ("Admin Manager", 45000.00, "Administration"),
+    ("Admin Staff", 30000.00, "Finance"),
+    ("Secretary", 30000.00, "Human Resources"),
+    ("Payroll", 45000.00, "Information Technology"),
+    ("Web Developer", 90000.00, "Information Technology"),
+    ("Software Developer", 60000.00, "Information Technology");
 
 -- Employee info
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES
--- Employee managers
-    ("Chris", "Traeger", 1, NULL),
-    ("Ron", "Swanson", 2, NULL),
-    ("Leslie", "Knope", 3, NULL),
-    ("George", "Fincher", 8, NULL),
--- Employees with managers
-    ("Tom", "Haverford", 4, 3),
-    ("Donna", "Meagle", 5, 2),
-    ("April", "Ludgate", 6, 3),
-    ("Jerry", "Gergich", 7, 2),
-    ("Mark", "Brandanawicz", 9, 4),
-    ("Benjamin", "Wyatt", 10, 1),
-    ("Andy", "Dwyer", 11, 2);
+    ("Sally", "Jones", 1, NULL),
+    ("Bob", "Smith", 2, NULL),
+    ("Becky", "Johnson", 3, NULL),
+    ("Ken", "Booth", 8, NULL),
+    ("Bob", "Marley", 4, 3),
+    ("Mohammed", "Ali", 5, 2),
+    ("Ezra", "Tafari", 6, 3),
+    ("Jackie", "Jump", 7, 2),
+    ("Victoria", "Sticktoria", 5, 4),
+    ("Kiran", "Hotdes", 5, 1),
+    ("Seth", "Beckford", 5, 2);
