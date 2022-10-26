@@ -4,9 +4,9 @@ const {
   viewAllDepartment,
   addDepartment,
   deleteDept,
+  deptBudget,
 } = require("./utils/dept");
 
-// const  = require("./utils/dept");
 const { viewAllRoles, addRole, deleteRole } = require("./utils/role");
 const {
   viewAllEmployees,
@@ -14,15 +14,11 @@ const {
   updateEmployee,
   viewByManager,
   deleteEmployee,
+  updateManager,
+  viewByDept,
 } = require("./utils/emp");
 const dbase = require("./config/connection");
 const Sequelize = require("sequelize");
-// const dbase = sql.createConnection({
-//   user: "root",
-//   password: "@6UHnuk9d@123",
-//   database: "employee_db",
-//   multipleStatements: true,
-// });
 
 function startPrompt() {
   inquirer
@@ -38,10 +34,13 @@ function startPrompt() {
         "Add A Role",
         "Add An Employee",
         "View By Manager",
+        "View By Department",
         "Update Employee's Role",
+        "Update Employee's Manager",
         "Delete Employee",
         "Delete department",
         "Delete role",
+        "View Department Budgets",
         "Quit",
       ],
     })
@@ -68,6 +67,9 @@ function startPrompt() {
         case "Update Employee's Role":
           updateEmployee(dbase, startPrompt);
           break;
+        case "Update Employee's Manager":
+          updateManager(dbase, startPrompt);
+          break;
         case "Delete Employee":
           deleteEmployee(dbase, startPrompt);
           break;
@@ -80,6 +82,12 @@ function startPrompt() {
         case "View By Manager":
           viewByManager(dbase, startPrompt);
           break;
+        case "View By Department":
+          viewByDept(dbase, startPrompt);
+          break;
+        case "View Department Budgets":
+          deptBudget(dbase, startPrompt);
+          break;
         case "QUIT":
           dbase.end();
           break;
@@ -90,8 +98,3 @@ function startPrompt() {
 }
 
 startPrompt();
-// // Start application
-// dbase.connect((err) => {
-//   if (err) throw err;
-//   startPrompt();
-// });

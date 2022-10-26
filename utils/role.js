@@ -63,9 +63,10 @@ function addRole(dbase, startPrompt) {
         },
       ])
       .then((answer) => {
+        console.log(newRole);
         newRole.title = answer.role_name;
         newRole.salary = answer.salary;
-        newRole.id;
+        newRole.department_id = answer.dept_name;
 
         // Translate manager_name to id
         connection.query(
@@ -73,7 +74,7 @@ function addRole(dbase, startPrompt) {
           answer.dept_name,
           (err, departmentResults) => {
             if (err) throw err;
-            newRole.department_id = departmentResults[0].id;
+            // newRole.department_id = departmentResults[0].id;
             console.log("Adding new role: ", newRole);
 
             connection.query("INSERT INTO role SET ?", newRole, (err) => {
