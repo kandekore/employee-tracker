@@ -9,16 +9,16 @@ VALUES
     ("Operations");
 
 -- Employee Roles
-INSERT INTO role (title, salary, department_name)
+INSERT INTO role (title, salary, department_id)
 VALUES
-    ("Sales Manager", 120000.00, "Sales"),
-    ("Director", 900000.00, "Administration"),
-    ("Admin Manager", 45000.00, "Administration"),
-    ("Admin Staff", 30000.00, "Finance"),
-    ("Secretary", 30000.00, "Human Resources"),
-    ("Payroll", 45000.00, "Information Technology"),
-    ("Web Developer", 90000.00, "Information Technology"),
-    ("Software Developer", 60000.00, "Information Technology");
+    ("Sales Manager", 120000.00, 1),
+    ("Director", 900000.00, 2),
+    ("Admin Manager", 45000.00, 2),
+    ("Admin Staff", 30000.00, 2),
+    ("Secretary", 30000.00, 2),
+    ("Payroll", 45000.00, 3),
+    ("Web Developer", 90000.00, 4),
+    ("Software Developer", 60000.00, 4);
 
 -- Employee info
 

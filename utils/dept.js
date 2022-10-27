@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const sql = require("mysql2");
 const connection = require("../config/connection");
 
+// VIEW ALL DEPARTMENTS
 function viewAllDepartment(dbase, startPrompt) {
   const query = "SELECT * FROM department";
   dbase.query(query, (err, res) => {
@@ -12,6 +13,7 @@ function viewAllDepartment(dbase, startPrompt) {
   });
 }
 
+//ADD DEPARTMENT
 function addDepartment(connection, startPrompt) {
   inquirer
     .prompt([
@@ -42,6 +44,7 @@ function addDepartment(connection, startPrompt) {
     });
 }
 
+//DELETE DEPARTMENT
 function deleteDept(dbase, startPrompt) {
   dbase.query("SELECT * FROM department", (err, results) => {
     if (err) throw err;
@@ -70,8 +73,9 @@ function deleteDept(dbase, startPrompt) {
       });
   });
 }
+
+//VIEW DEPARTMENT BUDGETS
 function deptBudget(connection, startPrompt) {
-  // Query the database for all available departments to prompt user
   connection.query("SELECT * FROM department", (err, results) => {
     if (err) throw err;
     inquirer
@@ -99,17 +103,17 @@ function deptBudget(connection, startPrompt) {
                   ORDER BY employee.id`;
         connection.query(query, answer.department, (err, res) => {
           if (err) throw err;
-          console.table(res);
-          // function budget() {
           const calc = [];
           var total = 0;
           for (let i = 0; i < res.length; i++) {
             calc.push(res[i].salary);
-            console.log("£", res[i].sum_score);
-            // total + res[i].salary;
+            console.log(
+              "The wage budget for the",
+              res[i].department,
+              "department is " + "£" + res[i].sum_score
+            );
           }
           console.log(calc);
-          // }
 
           startPrompt();
         });
