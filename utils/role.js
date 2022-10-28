@@ -2,6 +2,7 @@ const inquirer = require("inquirer");
 const sql = require("mysql2");
 const connection = require("../config/connection");
 
+///VIEW ALL ROLES
 function viewAllRoles(dbase, startPrompt) {
   const query =
     "SELECT title as 'Job Title', role.id as 'Role ID', name as Department, salary as 'Salary'  FROM role inner join department on role.department_id  = department.id;";
@@ -11,7 +12,7 @@ function viewAllRoles(dbase, startPrompt) {
     startPrompt();
   });
 }
-
+///ADD ROLL
 function addRole(dbase, startPrompt) {
   const newRole = {};
   connection.query("SELECT * FROM department", (err, results) => {
@@ -68,13 +69,12 @@ function addRole(dbase, startPrompt) {
         newRole.salary = answer.salary;
         newRole.department_id = answer.dept_name;
 
-        // Translate manager_name to id
         connection.query(
           "SELECT id FROM department WHERE name = ?",
           answer.dept_name,
           (err, departmentResults) => {
             if (err) throw err;
-            // newRole.department_id = departmentResults[0].id;
+
             console.log("Adding new role: ", newRole);
 
             connection.query("INSERT INTO role SET ?", newRole, (err) => {
@@ -87,7 +87,7 @@ function addRole(dbase, startPrompt) {
       });
   });
 }
-
+///DELETE ROLE
 function deleteRole(dbase, startPrompt) {
   connection.query("SELECT * FROM role", (err, results) => {
     if (err) throw err;

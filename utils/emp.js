@@ -1,9 +1,9 @@
 const inquirer = require("inquirer");
-// const Connection = require("mysql2/typings/mysql/lib/Connection");
+
 const connection = require("../config/connection");
 const then = require("mysql2/promise");
-// const { SELECT } = require("sequelize/types/query-types");
 
+//VIEW ALL EMPLOYEES
 function viewAllEmployees(dbase, startPrompt) {
   const query =
     "SELECT employee.id as 'Employee ID', employee.first_name as 'First Name', employee.last_name as 'Last Name', role.title as 'Job Title', role.salary as Salary, department.name as Department, concat(e.first_name, ' ',  e.last_name) AS manager FROM employee LEFT    JOIN employee as e ON e.id = employee.manager_id JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id  ORDER BY employee.id;";
@@ -13,7 +13,7 @@ function viewAllEmployees(dbase, startPrompt) {
     startPrompt();
   });
 }
-///ADDING MANAGER ISSUE
+///ADD EMPLOYEE
 function addEmployee(dbase, startPrompt) {
   const newEmployee = {};
   connection.query("SELECT * FROM role", (err, results) => {
@@ -66,7 +66,7 @@ function addEmployee(dbase, startPrompt) {
         newEmployee.first_name = answer.first_name;
         newEmployee.last_name = answer.last_name;
         newEmployee.role_id = answer.role_name;
-        console.log(answer.id);
+
         connection.query("SELECT * FROM employee ", (err, employeesAll) => {
           if (err) throw err;
           inquirer
@@ -112,7 +112,7 @@ function addEmployee(dbase, startPrompt) {
       });
   });
 }
-///DELETE WORKAROUND
+///DELETE EMPLOYEE
 function deleteEmployee(dbase, startPrompt) {
   connection.query("SELECT * FROM employee", (err, results) => {
     if (err) throw err;
@@ -161,49 +161,7 @@ function deleteEmployee(dbase, startPrompt) {
       });
   });
 }
-///UPDATE ISSUE
-// function updateEmployee(connection, startPrompt) {
-//   connection.query("SELECT * FROM employee", (err, results) => {
-//     if (err) throw err;
-//     inquirer
-//       .prompt([
-//         {
-//           name: "employeeedit",
-//           type: "list",
-//           choices() {
-//             const empEditArray = [];
-//             for (let i = 0; i < results.length; i++) {
-//               empEditArray.push(results[i].first_name);
-//             }
-//             return empEditArray;
-//           },
-//           message: "choose employee to edit",
-//         },
-//       ])
-//       .then((answer) => {
-//         empNewRole = answer.employeeedit;
-//         connection.query("SELECT * FROM role", (err, results) => {
-//           if (err) throw err;
-
-//           inquirer.prompt([
-//             {
-//               name: "rolelist",
-//               type: "list",
-//               choices() {
-//                 const roleArray = [];
-//                 for (let i = 0; i < results.length; i++) {
-//                   roleArray.push(results[i].name);
-//                 }
-//                 return roleArray;
-//               },
-//               message: "choose new role",
-//             },
-//           ]);
-//         });
-//       });
-//   });
-// }
-
+///UPDATE EMPLOYEE
 function updateEmployee(connection, startPrompt) {
   const employeeRoleObj = {};
 
@@ -282,7 +240,7 @@ function updateEmployee(connection, startPrompt) {
     }
   );
 }
-
+///*****************VIEW BY MANAGER
 function viewByManager(connection, startPrompt) {
   connection.query(
     "SELECT employee.first_name as 'First Name', employee.last_name as 'Last Name', employee.manager_id, e.first_name AS manager FROM employee LEFT JOIN employee AS e ON e.id = employee.manager_id  JOIN role ON employee.role_id = role.id JOIN department ON role.department_id = department.id order BY employee.id",
@@ -295,7 +253,9 @@ function viewByManager(connection, startPrompt) {
             type: "list",
             choices() {
               const groupStaff = [];
-
+              const unique = [
+                new Map(groupStaff.map((m) => [m.id, m])).values(),
+              ];
               for (let i = 1; i < results.length; i++) {
                 if (
                   results[i].manager != null ||
@@ -304,16 +264,15 @@ function viewByManager(connection, startPrompt) {
                     value: results[i].manager_id,
                   })
                 ) {
-                  //             res[i].manager_id,
                   groupStaff.push({
                     name: results[i].manager,
                     value: results[i].manager_id,
                   });
                 }
-                var mgrIds = [...new Set(groupStaff)];
-                console.log(mgrIds);
+                console.log(unique);
               }
               return groupStaff;
+              console.log(unique);
             },
             message: "Choose Manager",
           },
@@ -321,18 +280,15 @@ function viewByManager(connection, startPrompt) {
         .then((ans, async) => {
           const query = "SELECT * from employee WHERE manager_id = ?";
           connection.query(query, ans.employeemanager, (err, res) => {
-            console.log(ans);
             if (err) throw err;
             console.table(res);
             startPrompt();
           });
-          console.log("ans", ans);
-          console.log("ans.employeemanager", ans.employeemanager);
         });
     }
   );
 }
-
+///UPDATE MANAGER
 function updateManager(connection, startPrompt) {
   const newManager = {};
 
@@ -368,59 +324,54 @@ function updateManager(connection, startPrompt) {
         .then((answer) => {
           newManager.first_name = answer.employeeSelected.split(" ")[0];
 
-          connection.query(
-            `SELECT DISTINCT e.id, e.first_name, e.last_name FROM employee
-                      LEFT JOIN employee AS e ON employee.manager_id = e.id 
-                      WHERE e.first_name IS NOT NULL`,
-            (err, managerList) => {
-              if (err) throw err;
-              inquirer
-                .prompt([
-                  {
-                    name: "managerSelected",
-                    type: "list",
-                    choices() {
-                      const choiceArray = [];
-                      for (let i = 0; i < managerList.length; i++) {
-                        choiceArray.push(
-                          `${managerList[i].first_name} ${managerList[i].last_name}`
-                        );
-                      }
-                      return choiceArray;
-                    },
-                    message: "Who would you like to change their manager to?",
-                  },
-                ])
-                .then((ans) => {
-                  connection.query(
-                    "SELECT * FROM employee WHERE first_name = ?",
-
-                    ans.managerSelected.split(" ")[0],
-                    (err, managerResults) => {
-                      if (err) throw err;
-
-                      newManager.manager_id = managerResults[0].id;
-
-                      connection.query(
-                        "UPDATE employee SET manager_id = ? WHERE first_name = ?",
-                        [newManager.manager_id, newManager.first_name],
-                        (err) => {
-                          if (err) throw err;
-                          console.log("Employee manager successfully updated.");
-                          startPrompt();
-                        }
+          connection.query(`SELECT * FROM employee `, (err, managerList) => {
+            if (err) throw err;
+            inquirer
+              .prompt([
+                {
+                  name: "managerSelected",
+                  type: "list",
+                  choices() {
+                    const choiceArray = [];
+                    for (let i = 0; i < managerList.length; i++) {
+                      choiceArray.push(
+                        `${managerList[i].first_name} ${managerList[i].last_name}`
                       );
                     }
-                  );
-                });
-            }
-          );
+                    return choiceArray;
+                  },
+                  message: "Who would you like to change their manager to?",
+                },
+              ])
+              .then((ans) => {
+                connection.query(
+                  "SELECT * FROM employee WHERE first_name = ?",
+
+                  ans.managerSelected.split(" ")[0],
+                  (err, managerResults) => {
+                    if (err) throw err;
+
+                    newManager.manager_id = managerResults[0].id;
+
+                    connection.query(
+                      "UPDATE employee SET manager_id = ? WHERE first_name = ?",
+                      [newManager.manager_id, newManager.first_name],
+                      (err) => {
+                        if (err) throw err;
+                        console.log("Employee manager successfully updated.");
+                        startPrompt();
+                      }
+                    );
+                  }
+                );
+              });
+          });
         });
     }
   );
 }
+///VIEW EMPLOYEE BY DEPARTMENT
 function viewByDept(connection, startPrompt) {
-  // Query the database for all available departments to prompt user
   connection.query("SELECT * FROM department", (err, results) => {
     if (err) throw err;
     inquirer
@@ -439,7 +390,6 @@ function viewByDept(connection, startPrompt) {
         },
       ])
       .then((answer) => {
-        console.log(answer.salary);
         const query = `SELECT employee.id, employee.first_name, employee.last_name,
                   role.title, role.salary,
                   department.name AS department,
@@ -452,16 +402,12 @@ function viewByDept(connection, startPrompt) {
         connection.query(query, answer.department, (err, res) => {
           if (err) throw err;
           console.table(res);
-          // function budget() {
+
           const calc = [];
           var total = 0;
           for (let i = 0; i < res.length; i++) {
             calc.push(res[i].salary);
-            console.log(res[i].salary);
-            // total + res[i].salary;
           }
-          console.log(calc);
-          // }
 
           startPrompt();
         });

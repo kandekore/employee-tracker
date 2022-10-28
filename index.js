@@ -33,8 +33,8 @@ function startPrompt() {
         "Add A Department",
         "Add A Role",
         "Add An Employee",
-        "View By Manager",
-        "View By Department",
+        "View Employee By Manager",
+        "View Employee By Department",
         "Update Employee's Role",
         "Update Employee's Manager",
         "Delete Employee",
@@ -79,10 +79,10 @@ function startPrompt() {
         case "Delete role":
           deleteRole(dbase, startPrompt);
           break;
-        case "View By Manager":
+        case "View Employee By Manager":
           viewByManager(dbase, startPrompt);
           break;
-        case "View By Department":
+        case "View Employee By Department":
           viewByDept(dbase, startPrompt);
           break;
         case "View Department Budgets":
