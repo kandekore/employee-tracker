@@ -64,7 +64,6 @@ function addRole(dbase, startPrompt) {
         },
       ])
       .then((answer) => {
-        console.log(newRole);
         newRole.title = answer.role_name;
         newRole.salary = answer.salary;
         newRole.department_id = answer.dept_name;

@@ -107,13 +107,18 @@ function deptBudget(connection, startPrompt) {
           var total = 0;
           for (let i = 0; i < res.length; i++) {
             calc.push(res[i].salary);
-            console.log(
-              "The wage budget for the",
-              res[i].department,
-              "department is " + "£" + res[i].sum_score
-            );
+            // console.log(
+            //   "The wage budget for the",
+            //   res[i].department,
+            //   "department is " + "£" + res[i].sum_score
+            // );
+            console.log("*************************************");
+
+            console.log(res[i].department, "Department Budget");
+            console.log("£" + res[i].sum_score);
+
+            console.log("*************************************");
           }
-          console.log(calc);
 
           startPrompt();
         });

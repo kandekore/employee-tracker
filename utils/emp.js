@@ -253,26 +253,19 @@ function viewByManager(connection, startPrompt) {
             type: "list",
             choices() {
               const groupStaff = [];
-              const unique = [
-                new Map(groupStaff.map((m) => [m.id, m])).values(),
-              ];
+
               for (let i = 1; i < results.length; i++) {
-                if (
-                  results[i].manager != null ||
-                  groupStaff.includes({
-                    name: results[i].manager,
-                    value: results[i].manager_id,
-                  })
-                ) {
-                  groupStaff.push({
-                    name: results[i].manager,
-                    value: results[i].manager_id,
-                  });
+                // console.log(userExists(groupStaff, results[i].manager));
+                if (results[i].manager !== null) {
+                  if (!userExists(groupStaff, results[i].manager)) {
+                    groupStaff.push({
+                      name: results[i].manager,
+                      value: results[i].manager_id,
+                    });
+                  }
                 }
-                console.log(unique);
               }
               return groupStaff;
-              console.log(unique);
             },
             message: "Choose Manager",
           },
@@ -287,6 +280,12 @@ function viewByManager(connection, startPrompt) {
         });
     }
   );
+}
+
+function userExists(groupStaff, name) {
+  return groupStaff.some(function (el) {
+    return el.name === name;
+  });
 }
 ///UPDATE MANAGER
 function updateManager(connection, startPrompt) {
