@@ -36,7 +36,7 @@ Clone the file from https://github.com/kandekore/employee-tracker.git
 
 Open a terminal window and enter 'npm install'
 
-Enter mysql -u"<your username>" -p"<your password>"
+Enter mysql -u"{your username}" -p"{your password}"
 
 Initiate database by entering source db/schema.sql
 
