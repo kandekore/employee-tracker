@@ -1,19 +1,63 @@
-# employee-trackerGIVEN a command-line application that accepts user input
+![badmath](https://img.shields.io/badge/license-MIT%2FApache--2.0-blue)
 
-WHEN I start the application
-THEN I am presented with the following options: view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-WHEN I choose to view all departments
-THEN I am presented with a formatted table showing department names and department ids
-WHEN I choose to view all roles
-THEN I am presented with the job title, role id, the department that role belongs to, and the salary for that role
-WHEN I choose to view all employees
-THEN I am presented with a formatted table showing employee data, including employee ids, first names, last names, job titles, departments, salaries, and managers that the employees report to
-WHEN I choose to add a department
-THEN I am prompted to enter the name of the department and that department is added to the database
-WHEN I choose to add a role
-THEN I am prompted to enter the name, salary, and department for the role and that role is added to the database
-WHEN I choose to add an employee
-THEN I am prompted to enter the employee’s first name, last name, role, and manager, and that employee is added to the database
-WHEN I choose to update an employee role
-THEN I am prompted to select an employee to update and their new role and this information is updated in the database
-Mock-Up
+# Employee Tracker
+
+## Table of Contents
+
+- [Description](#Description)
+- [Usage](#usage)
+- [Installation](#installation)
+- [Testing](#testing)
+- [Contributors](#Contributors)
+- [Questions](#Questions)
+
+## Description
+
+A command-line application built from scratch to manage a company's employee database, using Node.js, Inquirer, and MySQL.
+
+- The Motivation for building this application was To further understand SQL
+- The application was built to Make tasks easier for H.R teams
+- It solves the problem of keeping track of staff roles & salaries
+- Through the process of building this application I learned how to work within SQL and to display data tables in the terminal
+
+## Usage
+
+For a video of how to use the application please follow [this link.](https://drive.google.com/file/d/1l1RGs4eez66GYBFHCS75o0TAJbL18pqu/view)
+
+The application used within a terminal
+
+## License
+
+This application is covered under the Apache License 2.0 licence
+
+## Installation
+
+Clone the file from https://github.com/kandekore/employee-tracker.git
+
+Open a terminal window and enter 'npm install'
+
+Enter mysql -u"<your username>" -p"<your password>"
+
+Initiate database by entering source db/schema.sql
+
+Seed database by entering db/seeds.sql
+
+Enter quit to exit mysql
+
+Enter 'node index.js' into terminal to run
+
+## Testing
+
+Make inputs and test delete functions and views
+
+## Contributors
+
+[Darren Kandekore](https://github.com/kandekore)
+
+## Questions
+
+Please contact me if you have any questions
+
+[Kandekore](https://github.com/Kandekore)
+
+[darren@kandekore.net](mailto:darren@kandekore.net)
